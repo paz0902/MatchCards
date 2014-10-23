@@ -86,13 +86,13 @@ static const int COST_TO_CHOOSE = 1;
                             NSLog(@"We got no match");
                             for (Card *chosenCard in cardsChosen){
                                 chosenCard.chosen = NO;
-                                int penalty = MISMATCH_PENALTY * self.gameMode;
-                                self.score += penalty;
-                                [self.lastMove addObject:[NSString stringWithFormat:@"No Match in %@ %@. Lose %d points!",
-                                                          card.contents,
-                                                          [self getAllCardContents:cardsChosen],
-                                                          penalty ]];
                             } //no match for loop
+                            int penalty = MISMATCH_PENALTY * self.gameMode;
+                            self.score += penalty;
+                            [self.lastMove addObject:[NSString stringWithFormat:@"No Match in %@ %@. Lose %d points!",
+                                                    card.contents,
+                                                    [self getAllCardContents:cardsChosen],
+                                                    penalty ]];
                         
                       } //else number of cards selected matches game mode
                     
