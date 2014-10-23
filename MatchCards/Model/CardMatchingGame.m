@@ -38,7 +38,6 @@
         }
         [self setGameMode:2];
         _lastMove = [[NSMutableArray alloc] init];
-        NSLog(@"myarray: %@", _lastMove);
     }
     return self;
 }
@@ -48,13 +47,9 @@ static const int COST_TO_CHOOSE = 1;
 
 - (void)chooseCardAtIndex:(NSUInteger)index {
     Card *card = [self cardAtIndex:index];
-    NSLog(@"Game Mode:%lu", (unsigned long)self.gameMode);
-    NSLog(@"array: %@", self.lastMove);
-    NSLog(@"lastMove Count1-> %d", [self.lastMove count]);
     if (!card.isMatched){
         if (card.isChosen){
             card.chosen = NO;
-            NSLog(@"LastMove Count-> %d", [self.lastMove count]);
             [self.lastMove addObject:[NSString stringWithFormat:@"Flipped Back %@", card.contents]];
         } else {
                 //See how many cards have been selected
@@ -71,8 +66,10 @@ static const int COST_TO_CHOOSE = 1;
                 if (([cardsChosen count] + 1) == self.gameMode){
                     NSLog(@"We can do some matches!");
                     int matchScore = [card match:cardsChosen];
-                    NSLog(@"Before matchScore:%d", matchScore);
-                    matchScore += [self matchRemainingCards:[NSMutableArray arrayWithArray:cardsChosen]];
+                    NSLog(@"Score is %d after comparing %@ against %@", matchScore, card.contents, [self getAllCardContents:cardsChosen]);
+                    int remaining_card_match = [self matchRemainingCards:[NSMutableArray arrayWithArray:cardsChosen]:0];
+                    NSLog(@"Score for comparing other cards with each other:%d", remaining_card_match);
+                    matchScore += remaining_card_match;
                     NSLog(@"After matchScore:%d", matchScore);
                     if (matchScore){
                         NSLog(@"We have some sort of match");
@@ -89,11 +86,12 @@ static const int COST_TO_CHOOSE = 1;
                             NSLog(@"We got no match");
                             for (Card *chosenCard in cardsChosen){
                                 chosenCard.chosen = NO;
-                                self.score += MISMATCH_PENALTY;
+                                int penalty = MISMATCH_PENALTY * self.gameMode;
+                                self.score += penalty;
                                 [self.lastMove addObject:[NSString stringWithFormat:@"No Match in %@ %@. Lose %d points!",
                                                           card.contents,
                                                           [self getAllCardContents:cardsChosen],
-                                                          MISMATCH_PENALTY]];
+                                                          penalty ]];
                             } //no match for loop
                         
                       } //else number of cards selected matches game mode
@@ -119,28 +117,28 @@ static const int COST_TO_CHOOSE = 1;
     NSMutableArray *card_contents = [[NSMutableArray alloc] init];
     //NSArray *cc = [card_contents cop]
     for (Card *acard in thecards){
-        NSLog(@"A CARD CONTENTS:%@", acard.contents);
         [card_contents addObject:acard.contents];
     }
-    //NSArray *array = [[NSArray alloc] initWithArray:card_contents];
-    //NSArray *array = [NSArray arrayWithArray:card_contents];
-    //NSLog(@"MY SPECIAL ARRAY %@", array);
-    //allcontents = [array compcomponentsJoinedByString:@" "];
     allcontents = [card_contents componentsJoinedByString:@" "];
-    NSLog(@"allcontents: %@", allcontents);
     return allcontents;
 }
 
--(NSInteger)matchRemainingCards:(NSMutableArray *)otherCards{
-    int score = 0;
+-(NSInteger)matchRemainingCards:(NSMutableArray *)otherCards :(NSInteger)localscore{
+    int subscore = 0;
+    NSLog(@"localscore pre:%d subscore pre:%d", localscore, subscore);
     if ([otherCards count] > 1){
         Card *firstCard = [otherCards firstObject];
+        NSLog(@"first card is now:%@", firstCard.contents);
         [otherCards removeObjectAtIndex:0];
-        score += [firstCard match:otherCards];
-        NSLog(@"remaining score:%d", score);
-        [self matchRemainingCards:otherCards];
+        subscore = [firstCard match:otherCards];
+        NSLog(@"Matching first card:%@ with %@", firstCard.contents, [self getAllCardContents:otherCards]);
+        NSLog(@"Gives result of %d", subscore);
+        localscore = subscore;
+        NSLog(@"localscore middle:%d subscore:%d", localscore, subscore);
+        subscore += [self matchRemainingCards:otherCards :localscore];
     }
-    return score;
+    NSLog(@"localscore post:%d subscore:%d", localscore, subscore);
+    return subscore;
 }
 
 

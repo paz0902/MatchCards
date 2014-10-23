@@ -301,12 +301,13 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ekn-ZC-h07">
-                                <rect key="frame" x="212" y="12" width="87" height="29"/>
+                                <rect key="frame" x="164" y="12" width="139" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="2"/>
                                     <segment title="3"/>
                                     <segment title="4"/>
+                                    <segment title="5"/>
                                 </segments>
                                 <connections>
                                     <action selector="selectgameMode:" destination="vXZ-lx-hvc" eventType="valueChanged" id="qDz-3D-0Th"/>

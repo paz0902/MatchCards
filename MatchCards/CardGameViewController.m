@@ -64,10 +64,8 @@
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     int lastindex = [self.game.lastMove count] - 1;
-    NSLog(@"lastindex ->%d", lastindex);
     NSString *status = @"Last Move";
     if (lastindex >= 0){
-        NSLog(@"GET LAST STATUS");
         status = self.game.lastMove[lastindex];
     }
     //Ensure label looks enabled
@@ -83,7 +81,6 @@
     return [UIImage imageNamed:card.isChosen ? @"cardFront" : @"cardBack"];
 }
 - (IBAction)newDealButton:(UIButton *)sender {
-    NSLog(@"Shuffle up and Deal");
     self.game = nil;
     //enable the option to choose number of cards to match
     for (int i = 0; i < [self.matchNumber numberOfSegments]; i++){
@@ -98,9 +95,6 @@
     [self updateUI];
 }
 - (IBAction)sliderMoved:(UISlider *)sender {
-    NSLog(@"Min %f",[sender minimumValue]);
-    NSLog(@"Min %f",[sender maximumValue]);
-    NSLog(@"Current %f", [sender value]);
     int lastMoveSegments = [self.game.lastMove count] - 1;
     if (lastMoveSegments == 0){
         self.lastMove.text = self.game.lastMove[0];
