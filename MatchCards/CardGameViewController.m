@@ -21,12 +21,16 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *matchNumber;
 @property (weak, nonatomic) IBOutlet UILabel *lastMove;
 @property (weak, nonatomic) IBOutlet UISlider *lastMoveSlider;
+@property (nonatomic) NSInteger currentGameModeIndex;
 
 @end
 
 @implementation CardGameViewController
 - (IBAction)selectgameMode:(UISegmentedControl *)sender {
-    [self.game setGameMode:([sender titleForSegmentAtIndex:[sender selectedSegmentIndex]].integerValue)];
+    // store in variable so when we 'redeal' we can choose the last selected option
+    self.currentGameModeIndex = [sender selectedSegmentIndex];
+    NSLog(@"currentGameModeIndex:%d", self.currentGameModeIndex);
+    [self.game setGameMode:([sender titleForSegmentAtIndex:self.currentGameModeIndex].integerValue)];
 }
 
 - (CardMatchingGame *)game{
@@ -40,7 +44,12 @@
     //return [[PlayingCardDeck alloc] init];
 }
 
-
+- (NSInteger)getCurrentGameModeIndex{
+    if (!self.currentGameModeIndex){
+        self.currentGameModeIndex = 0;
+    }
+    return self.currentGameModeIndex;
+}
 
 - (IBAction)touchCardButton:(UIButton *)sender {
     int cardIndex = [self.cardButtons indexOfObject:sender];
@@ -92,6 +101,8 @@
     [self.lastMoveSlider setValue:0.5];
     // Make sure label is back to normal
     [self.lastMove setAlpha:1];
+    self.matchNumber.selectedSegmentIndex = self.currentGameModeIndex;
+    [self.game setGameMode:([self.matchNumber titleForSegmentAtIndex:self.currentGameModeIndex].integerValue)];
     [self updateUI];
 }
 - (IBAction)sliderMoved:(UISlider *)sender {
