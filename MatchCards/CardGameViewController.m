@@ -7,8 +7,6 @@
 //
 
 #import "CardGameViewController.h"
-//#import "Deck.h"
-#import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
@@ -29,7 +27,7 @@
 - (IBAction)selectgameMode:(UISegmentedControl *)sender {
     // store in variable so when we 'redeal' we can choose the last selected option
     self.currentGameModeIndex = [sender selectedSegmentIndex];
-    NSLog(@"currentGameModeIndex:%d", self.currentGameModeIndex);
+    NSLog(@"currentGameModeIndex:%ld", (long)self.currentGameModeIndex);
     [self.game setGameMode:([sender titleForSegmentAtIndex:self.currentGameModeIndex].integerValue)];
 }
 
@@ -39,9 +37,9 @@
     return _game;
 }
 
+//abstract
 - (Deck *)createDeck {
-    return [[PlayingCardDeck alloc] init];
-    //return [[PlayingCardDeck alloc] init];
+    return nil;
 }
 
 - (NSInteger)getCurrentGameModeIndex{
@@ -71,7 +69,7 @@
         cardButton.enabled = !card.matched;
         
     }
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", (long)self.game.score];
     int lastindex = [self.game.lastMove count] - 1;
     NSString *status = @"Last Move";
     if (lastindex >= 0){
