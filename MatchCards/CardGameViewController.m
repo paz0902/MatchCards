@@ -64,7 +64,7 @@
     for (UIButton *cardButton in self.cardButtons){
         int cardIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardIndex];
-        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [self updateButtonTitleUI:cardButton :card];
         [cardButton setBackgroundImage:[self backGroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.matched;
         
@@ -78,6 +78,10 @@
     //Ensure label looks enabled
     [self.lastMove setAlpha:1];
     self.lastMove.text = status;
+}
+
+- (void)updateButtonTitleUI:(UIButton *)cardButton :(Card *) card{
+    [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
 }
 
 - (NSString *)titleForCard:(Card *)card{

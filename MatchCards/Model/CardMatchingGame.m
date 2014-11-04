@@ -25,6 +25,7 @@
 - (instancetype)initWithCardCount:(NSUInteger)count
                         usingDeck:(Deck *)deck {
     self = [super init];
+    NSLog(@"NEW GAME:%lu", (unsigned long)count);
     if (self){
         for (int i = 0; i < count; i++){
             Card *card = [deck drawRandomCard];

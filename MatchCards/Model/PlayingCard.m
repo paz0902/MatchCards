@@ -33,8 +33,6 @@
 @synthesize suit = _suit;
 
 + (NSArray *)validSuits {
-    //NSLog(@"Valid Suits");
-    //return @[@"H",@"D",@"C",@"S"];
     return @[@"♥︎", @"♦︎", @"♣︎", @"♠︎"];
 }
 
